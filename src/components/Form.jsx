@@ -2,18 +2,49 @@ import React,  { useState }  from 'react'
 import axios from 'axios'
 function Form() {
 
+    //Course data mapping
+    const courseData = {
+      'course1': 'N85000',
+      'course2': 'N4000',
+      'course3': 'N1000',
+    
+  };
+
+
+  const cos = 'You chose:';
+ 
+
+  //The form data
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    subject: '',
+    course_name: '',
+    course_price: '',
     message: ''
 });
 
-//error message
+
+
+//State to manage the selected course and price
+const [selectedCourse, setSelectedCourse] = useState('');
+const [coursePrice, setCoursePrice] = useState(null);
+
+
+
+
+//handler for input change
 const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
+      
+      const course = e.target.value;
+      setSelectedCourse(course);
+      setCoursePrice(courseData[course] || null);
+      //Update price based on selectecd course
+   
+
+      //error message
     const { name, value } = e.target;
     setFormData({
         ...formData,
@@ -122,13 +153,38 @@ const [errors, setErrors] = useState({});
 </div>
 <div className="flex-grow-1 ms-2">
 
-<input type="text" name='subject'  value={formData.subject} placeholder='Your Course' className={`form-control ${errors.name && 'is-invalid'}`} onChange={handleChange}/> 
+{/* <label htmlFor="coure" className={`form-control ${errors.name && 'is-invalid'}`}>Select a Course Name</label> */}
+
+<select  id="course" value={selectedCourse} className={`form-control ${errors.name && 'is-invalid'}`} onChange={handleChange}><option value="">Choose a Course Name</option>
+<option type="radio" value="course1">Compute</option>
+<option value="course2">Compute2</option>
+<option value="course3">Compute3</option>
+
+</select>
+
+
+</div>
+
+
+{/* <input type="text" name='subject'  value={formData.subject} placeholder='Your Course' className={`form-control ${errors.name && 'is-invalid'}`} onChange={handleChange}/> 
 
 {errors.subject && <div className='invalid-feedback'>{errors.subject}</div>}
-</div>
-</div>
+</div> */}
 
 
+
+</div>
+
+<div className="flex-grow-1">
+
+{coursePrice !== null && (
+<input type="text" name='course_price'  value={`Course Price: ${coursePrice}`} className={`form-control ${errors.name && 'is-invalid'}`} onChange={handleChange}/> 
+
+// {errors.subject && <div className='invalid-feedback'>{errors.subject}</div>}
+)}
+
+
+</div>
 
 <textarea id="" cols="30" rows="10" className={`form-control mt-3 ${errors.name && 'is-invalid'}`} onChange={handleChange}  name="message"  value={formData.message}  placeholder='Enter your Message'></textarea>
 {errors.message && <div className='invalid-feedback'>{errors.message}</div>}
